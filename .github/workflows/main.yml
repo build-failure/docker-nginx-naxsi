@@ -5,6 +5,9 @@ on:
       - "*.*.*"
 jobs:
   build:
+    strategy:
+        matrix:
+            version: ["1.22.1"]
     runs-on: ubuntu-latest
     steps:
       -
@@ -39,6 +42,8 @@ jobs:
           tags: buildfailure/nginx-naxsi:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
+          build-args:
+              - NGINX_VERSION=${{ matrix.version }}
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
